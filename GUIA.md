@@ -151,7 +151,7 @@ Para P10 (reporte sin duplicar): compara el `valor_ventas` del reporte con un `S
 
 ---
 
-## ✅ Checklist final (lo que revisará el profesor)
+## ✅ Checklist final
 
 - [ ] 4 sedes (1 distribución) y 4+ almacenes
 - [ ] 6 esquemas/microservicios con responsabilidades separadas
@@ -163,15 +163,3 @@ Para P10 (reporte sin duplicar): compara el `valor_ventas` del reporte con un `S
 - [ ] Datos ~4 meses con todos los casos especiales
 - [ ] 10 pruebas de verificación con evidencia
 - [ ] 15 entregables de la sección 12 (documentos + scripts + evidencias)
-
----
-
-## 🆘 Cuando te atasques
-
-Pídeme ayuda puntual, por ejemplo:
-- "No me sale el CHECK para la fragmentación, ¿cómo lo escribo?"
-- "Mi consulta 5 con LAG da error, aquí está mi SQL: ..."
-- "¿Cómo demuestro un acceso denegado?"
-- "Revísame esta vista y dime si está bien."
-
-Te explico el concepto y te doy pistas, no la solución completa — así lo aprendes de verdad. 💪
