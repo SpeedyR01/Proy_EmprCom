@@ -31,7 +31,7 @@ Los roles se infieren de **qué entidad ejecuta cada operación**, observando la
 
 Muestra qué funcionalidades (casos de uso), agrupadas por microservicio, puede ejecutar cada rol (actor).
 
-![Mi Imagen](DIAGRAMA%20DE%20CASOS%20DE%20USO.png)
+![Mi Imagen](Diagramas\DIAGRAMA%20DE%20CASOS%20DE%20USO.png)
 
 ---
 
@@ -39,7 +39,7 @@ Muestra qué funcionalidades (casos de uso), agrupadas por microservicio, puede 
 
 Muestra cómo una petición del usuario pasa por el **API Gateway**, es **autenticada/autorizada por el microservicio de Identidad y Accesos** (validación de rol), y luego se enruta al microservicio correspondiente. Cada microservicio tiene su propia base de datos.
 
-![Mi Imagen](DIAGRAMA%20DE%20ARQUITECTURA.png)
+![Mi Imagen](Diagramas\DIAGRAMA%20DE%20ARQUITECTURA.png)
 ---
 
 ## 4. Diagrama de Secuencia
