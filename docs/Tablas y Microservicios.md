@@ -5,7 +5,7 @@
 | **Tabla** | **Attributos Principales** |
 | --- | --- |
 | **sedes** | id_sede, nombre, ciudad, direccion, tipo_sede, estado |
-| **almacenes** | id_almacen, id_sede, nombre, tipo_allmacen, estado |
+| **almacenes** | id_almacen, id_sede, nombre, tipo_almacen, estado |
 | **categorias** | id_categoria, nombre, descripcion, estado |
 | **productos** | id_productos, sku, nombre, id_categoria, unidad_medida, precio_lista, estado |
 | **proveedores** | id_proveedor, identificacion, razon_social, ciudad, correo, telefono, estado |
