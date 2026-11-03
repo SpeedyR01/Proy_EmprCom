@@ -31,7 +31,7 @@ CREATE TABLE EMPRESA.proveedores (
 	telefono VARCHAR(20),
 	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
 		CHECK(estado in ('ACTIVO','INACTIVO'))
-)
+);
 
 CREATE TABLE EMPRESA.clientes (
 	id_cliente INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -43,19 +43,19 @@ CREATE TABLE EMPRESA.clientes (
 	telefono VARCHAR(20) NOT NULL,
 	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
 		CHECK(estado in ('ACTIVO','INACTIVO'))
-)
+);
 
 CREATE TABLE EMPRESA.cargos (
 	id_cargo INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	nombre VARCHAR(100) NOT NULL,
 	descripcion VARCHAR(255) NOT NULL
-)
+);
 
 CREATE TABLE EMPRESA.roles (
 	id_rol INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	nombre VARCHAR(80) NOT NULL,
 	descripcion VARCHAR(255) NOT NULL
-)
+);
 
 -- Las tablas que dependen exclusivamente de las anteriores --
 CREATE TABLE EMPRESA.almacenes (
@@ -70,7 +70,7 @@ CREATE TABLE EMPRESA.almacenes (
 	CONSTRAINT fk_almacenes_sede
 		FOREIGN KEY (id_sede)
 		REFERENCES EMPRESA.sedes (id_sede)
-)
+);
 
 CREATE TABLE EMPRESA.empleados (
 	id_empleado INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -88,7 +88,7 @@ CREATE TABLE EMPRESA.empleados (
 	CONSTRAINT fk_empleados_cargos
 		FOREIGN KEY (id_cargo)
 		REFERENCES EMPRESA.cargos (id_cargo)
-)
+);
 
 CREATE TABLE EMPRESA.productos (
 	id_producto INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -103,7 +103,7 @@ CREATE TABLE EMPRESA.productos (
 	CONSTRAINT fk_productos_categoria
 		FOREIGN KEY (id_categoria)
 		REFERENCES EMPRESA.categorias(id_categoria)
-)
+);
 
 -- SIGUIENTE NIVEL DE DEPENDENCIAS --
 CREATE TABLE EMPRESA.producto_proveedor (
@@ -120,7 +120,7 @@ CREATE TABLE EMPRESA.producto_proveedor (
 	CONSTRAINT fk_proveedor
 		FOREIGN KEY (id_proveedor)
 		REFERENCES EMPRESA.proveedores (id_proveedor)
-)
+);
 
 CREATE TABLE EMPRESA.usuarios (
 	id_usuario INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -134,7 +134,7 @@ CREATE TABLE EMPRESA.usuarios (
 	CONSTRAINT fk_usuario_empleado
 		FOREIGN KEY (id_empleado)
 		REFERENCES EMPRESA.empleados (id_empleado)
-)
+);
 
 CREATE TABLE EMPRESA.inventarios (
 	id_almacen INTEGER NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE EMPRESA.inventarios (
 	CONSTRAINT fk_producto
 		FOREIGN KEY (id_producto)
 		REFERENCES EMPRESA.productos (id_producto)
-)
+);
 
 CREATE TABLE EMPRESA.movimientos_inventarios (
 	id_movimiento INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -168,7 +168,7 @@ CREATE TABLE EMPRESA.movimientos_inventarios (
 	CONSTRAINT fk_producto
 		FOREIGN KEY (id_producto)
 		REFERENCES EMPRESA.productos(id_producto)
-)
+);
 
 CREATE TABLE EMPRESA.ajustes_inventarios (
 	id_ajuste INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -185,7 +185,7 @@ CREATE TABLE EMPRESA.ajustes_inventarios (
 	CONSTRAINT fk_empleado
 		FOREIGN KEY (id_empleado)
 		REFERENCES EMPRESA.empleados (id_empleado)
-)
+);
 
 CREATE TABLE EMPRESA.transferencias (
 	id_transferencia INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -193,7 +193,7 @@ CREATE TABLE EMPRESA.transferencias (
 	id_almacen_destino INTEGER NOT NULL,
 	fecha_solicitud TIMESTAMP NOT NULL,
 	fecha_recepcion TIMESTAMP NOT NULL,
-	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
+	estado VARCHAR(20) NOT NULL DEFAULT 'SOLICITADA'
 		CHECK(estado in ('SOLICITADA','DESPACHADA','RECIBIDA','ANULADA')),
 
 	CONSTRAINT fk_almacen_origen
@@ -202,7 +202,7 @@ CREATE TABLE EMPRESA.transferencias (
 	CONSTRAINT fk_almacen_destino
 		FOREIGN KEY (id_almacen_destino)
 		REFERENCES EMPRESA.almacenes (id_almacen)
-)
+);
 
 CREATE TABLE EMPRESA.ordenes_compra (
 	id_orden_compra INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -211,8 +211,8 @@ CREATE TABLE EMPRESA.ordenes_compra (
 	id_empleado INTEGER NOT NULL,
 	fecha_orden TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	fecha_estimada TIMESTAMP NOT NULL,
-	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
-		CHECK(estado in ('SOLICITADA','DESPACHADA','RECIBIDA','ANULADA')),
+	estado VARCHAR(20) NOT NULL DEFAULT 'BORRADOR'
+		CHECK(estado in ('BORRADOR','ENVIADA','RECIBIDA','ANULADA')),
 
 	CONSTRAINT fk_ordenes_proveedor
 		FOREIGN KEY (id_proveedor)
@@ -223,7 +223,7 @@ CREATE TABLE EMPRESA.ordenes_compra (
 	CONSTRAINT fk_ordenes_empleado
 		FOREIGN KEY (id_empleado)
 		REFERENCES EMPRESA.empleados (id_empleado)
-)
+);
 
 CREATE TABLE EMPRESA.pedidos_venta(
 	id_pedido INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -232,8 +232,8 @@ CREATE TABLE EMPRESA.pedidos_venta(
 	id_cliente INTEGER NOT NULL,
 	id_empleado INTEGER NOT NULL,
 	fecha_pedido TIMESTAMP,
-	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
-		CHECK(estado in ('SOLICITADA','DESPACHADA','RECIBIDA','ANULADA')),
+	estado VARCHAR(20) NOT NULL DEFAULT 'CREADO'
+		CHECK(estado in ('CREADO','CONFIRMADO','ANULADO')),
 
 	CONSTRAINT fk_pedidos_sede
 		FOREIGN KEY (id_sede)
@@ -247,7 +247,7 @@ CREATE TABLE EMPRESA.pedidos_venta(
 	CONSTRAINT fk_pedidos_empleado
 		FOREIGN KEY (id_empleado)
 		REFERENCES EMPRESA.empleados (id_empleado)
-)
+);
 
 -- SIGUENTE NIVEL DE DEPENDENCIAS --
 CREATE TABLE EMPRESA.detalle_transferencias (
@@ -264,7 +264,7 @@ CREATE TABLE EMPRESA.detalle_transferencias (
 	CONSTRAINT fk_producto
 		FOREIGN KEY (id_producto)
 		REFERENCES EMPRESA.productos (id_producto)
-)
+);
 
 CREATE TABLE EMPRESA.usuario_rol (
 	id_usuario INTEGER NOT NULL,
@@ -279,7 +279,7 @@ CREATE TABLE EMPRESA.usuario_rol (
 	CONSTRAINT fk_rol
 		FOREIGN KEY (id_rol)
 		REFERENCES EMPRESA.roles (id_rol)
-)
+);
 
 CREATE TABLE EMPRESA.auditoria_accesos (
 	id_auditoria BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -291,7 +291,7 @@ CREATE TABLE EMPRESA.auditoria_accesos (
 	CONSTRAINT fk_auditoria_usuario
 		FOREIGN KEY(id_usuario)
 		REFERENCES EMPRESA.usuarios (id_usuario)
-)
+);
 
 CREATE TABLE EMPRESA.detalle_orden_compra (
 	id_orden_compra INTEGER NOT NULL,
@@ -308,19 +308,19 @@ CREATE TABLE EMPRESA.detalle_orden_compra (
 	CONSTRAINT fk_producto
 		FOREIGN KEY (id_producto)
 		REFERENCES EMPRESA.productos (id_producto)
-)
+);
 
 CREATE TABLE EMPRESA.recepciones_compra (
 	id_recepcion INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	id_orden_compra INTEGER NOT NULL,
 	fecha_recepcion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
-		CHECK(estado in ('SOLICITADA','DESPACHADA','RECIBIDA','ANULADA')),
+	estado VARCHAR(20) NOT NULL DEFAULT 'PARCIAL'
+		CHECK(estado in ('PARCIAL','COMPLETA','ANULADA')),
 
 	CONSTRAINT fk_recepciones_orden
 		FOREIGN KEY (id_orden_compra)
 		REFERENCES EMPRESA.ordenes_compra (id_orden_compra)
-)
+);
 
 CREATE TABLE EMPRESA.detalle_pedido (
 	id_pedido INTEGER NOT NULL,
@@ -337,20 +337,20 @@ CREATE TABLE EMPRESA.detalle_pedido (
 	CONSTRAINT fk_producto
 		FOREIGN KEY (id_producto)
 		REFERENCES EMPRESA.productos (id_producto)
-)
+);
 
 
 CREATE TABLE EMPRESA.ventas (
 	id_venta INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	id_pedido INTEGER NOT NULL,
 	fecha_venta TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
-		CHECK(estado in ('SOLICITADA','DESPACHADA','RECIBIDA','ANULADA')),
+	estado VARCHAR(20) NOT NULL DEFAULT 'COFIRMADA'
+		CHECK(estado in ('CONFIRMADA','ANULADA')),
 
 	CONSTRAINT fk_pedido
 		FOREIGN KEY (id_pedido)
 		REFERENCES EMPRESA.pedidos_venta (id_pedido)
-)
+);
 
 -- DETALLE RECEPCION, PAGOS, DEVOLUCIONES --
 CREATE TABLE EMPRESA.detalle_recepcion (
@@ -365,9 +365,8 @@ CREATE TABLE EMPRESA.detalle_recepcion (
 		REFERENCES EMPRESA.productos (id_producto),
 	CONSTRAINT fk_recepcion
 		FOREIGN KEY (id_recepcion)
-		REFERENCES EMPRESA.recepciones_compra (id_recepcion)
-	
-)
+		REFERENCES EMPRESA.recepciones_compra (id_recepcion)	
+);
 
 CREATE TABLE EMPRESA.pagos (
 	id_pago INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -376,26 +375,26 @@ CREATE TABLE EMPRESA.pagos (
 	valor DECIMAL(12,2) NOT NULL,
 	medio_pago VARCHAR(20) NOT NULL
 		CHECK(medio_pago IN ('EFECTIVO','TARJETA','TRANSFERENCIA','OTRO')),
-	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
-		CHECK(estado in ('SOLICITADA','DESPACHADA','RECIBIDA','ANULADA')),
+	estado VARCHAR(20) NOT NULL DEFAULT 'APROBADO'
+		CHECK(estado in ('APROBADO','RECHAZADO','ANULADO')),
 
 	CONSTRAINT fk_pagos_ventas
 		FOREIGN KEY (id_venta)
 		REFERENCES EMPRESA.ventas(id_venta)
-)
+);
 
 CREATE TABLE empresa.devoluciones (
 	id_devolucion INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	id_venta INTEGER NOT NULL,
 	fecha_solicitud TIMESTAMP NOT NULL,
 	motivo VARCHAR(255) NOT NULL,
-	estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO'
-		CHECK(estado in ('SOLICITADA','DESPACHADA','RECIBIDA','ANULADA')),
+	estado VARCHAR(20) NOT NULL DEFAULT 'SOLICITADA'
+		CHECK(estado in ('SOLICITADA','APROBADA','RECHAZADA')),
 
 	CONSTRAINT fk_devoluciones_venta 
 		FOREIGN KEY (id_venta)
 		REFERENCES empresa.ventas (id_venta)
-)
+);
 
 CREATE TABLE empresa.detalle_devolucion (
 	id_devolucion INTEGER NOT NULL,
@@ -412,5 +411,5 @@ CREATE TABLE empresa.detalle_devolucion (
 	CONSTRAINT fk_producto
 		FOREIGN KEY (id_producto)
 		REFERENCES EMPRESA.productos(id_producto)
-)
+);
 		
