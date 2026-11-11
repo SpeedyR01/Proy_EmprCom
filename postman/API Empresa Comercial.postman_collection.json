@@ -473,7 +473,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{   \"id_orden_compra\":1,\r\n    \"estado\":\"COMPLETA\",\r\n    \"items\":[{\r\n        \"id_producto\":1,\r\n        \"cantidad_recibida\":10\r\n    }] \r\n}",
+              "raw": "{ \r\n    \"id_orden_compra\":1,\r\n    \"estado\":\"COMPLETA\",\r\n    \"items\":[{\r\n        \"id_producto\":1,\r\n        \"cantidad_recibida\":10\r\n    }] \r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -622,6 +622,25 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "BODEGUERO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url-transferencias}}/transferencias/1/recibir",
+              "host": [
+                "{{url-transferencias}}"
+              ],
+              "path": [
+                "transferencias",
+                "1",
+                "recibir"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -684,14 +703,14 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{url-vetnas}}/ventas/confirmar/10",
+              "raw": "{{url-vetnas}}/ventas/confirmar/9",
               "host": [
                 "{{url-vetnas}}"
               ],
               "path": [
                 "ventas",
                 "confirmar",
-                "10"
+                "9"
               ]
             }
           },
@@ -704,7 +723,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"id_venta\":1,\r\n    \"valor\":379800,\r\n    \"medio_pago\":\"TARJETA\" \r\n}",
+              "raw": "{ \r\n    \"id_venta\":1,\r\n    \"valor\":100000,\r\n    \"medio_pago\":\"TARJETA\" \r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -746,6 +765,31 @@
               "path": [
                 "ventas",
                 "devoluciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CAJERO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-vetnas}}/ventas/devoluciones/1/aprobar",
+              "host": [
+                "{{url-vetnas}}"
+              ],
+              "path": [
+                "ventas",
+                "devoluciones",
+                "1",
+                "aprobar"
               ]
             }
           },
