@@ -40,9 +40,20 @@ router.post("/ordenes", requireRole("COMPRADOR", "ADMINISTRADOR"), async (req, r
 // Registrar recepcion (bodeguero)
 router.post("/recepciones", requireRole("BODEGUERO", "ADMINISTRADOR"), async (req, res) => {
     const { id_orden_compra, estado, items } = req.body || {};
+    const token = req.headers.authorization;
     const client = await pool.connect();
     try {
         await client.query("BEGIN");
+
+        // 1. Necesitamos el almacen destino de la orden (para saber dónde entra el stock)
+        const oc = await client.query(
+            `SELECT id_almacen_destino FROM compras.ordenes_compra WHERE id_orden_compra=$1`,
+            [id_orden_compra]
+        );
+        if (oc.rowCount === 0) throw new Error("La orden de compra no existe");
+        const idAlmacen = oc.rows[0].id_almacen_destino;
+
+        // 2. Crear la recepcion + detalle
         const r = await client.query(
             `INSERT INTO compras.recepciones_compra (id_orden_compra, estado)
        VALUES ($1,$2) RETURNING id_recepcion`,
@@ -56,12 +67,33 @@ router.post("/recepciones", requireRole("BODEGUERO", "ADMINISTRADOR"), async (re
                 [idR, it.id_producto, it.cantidad_recibida]
             );
         }
+
+        // 3. Sumar stock en ms-inventarios (ENTRADA) por cada producto recibido
+        for (const it of items) {
+            const resp = await fetch(`${process.env.URL_INVENTARIOS}/inventarios/movimientos`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": token },
+                body: JSON.stringify({
+                    id_almacen: idAlmacen,
+                    id_producto: it.id_producto,
+                    tipo_movimiento: "ENTRADA",
+                    cantidad: it.cantidad_recibida,
+                }),
+            });
+            if (!resp.ok) {
+                const err = await resp.json().catch(() => ({}));
+                throw new Error("Fallo al sumar stock: " + (err.error || resp.status));
+            }
+        }
+
         await client.query("COMMIT");
-        res.status(201).json({ id_recepcion: idR });
+        res.status(201).json({ id_recepcion: idR, mensaje: "Recepcion registrada y stock actualizado" });
     } catch (e) {
         await client.query("ROLLBACK");
         res.status(400).json({ error: e.message });
-    } finally { client.release(); }
+    } finally {
+        client.release();
+    }
 });
 
 export default router;
