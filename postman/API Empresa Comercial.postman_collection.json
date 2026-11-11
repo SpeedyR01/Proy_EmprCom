@@ -1,0 +1,801 @@
+{
+  "info": {
+    "_postman_id": "e2ce7bde-3c87-4e68-a503-4da5a290a4d9",
+    "name": "API Empresa Comercial",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52848642",
+    "_collection_link": "https://go.postman.co/collection/52848642-e2ce7bde-3c87-4e68-a503-4da5a290a4d9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Identidad y Acceso",
+      "item": [
+        {
+          "name": "1. Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base-url}}/",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "Verifica que el servidor este corriendo."
+          },
+          "response": []
+        },
+        {
+          "name": "2. Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Guarda el token devuelto en la variable de coleccion {{token}}\nconst data = pm.response.json();\nif (data && data.token) {\n    pm.collectionVariables.set('token', data.token);\n    console.log('Token guardado. Roles:', data.roles);\n}\npm.test('login responde 200', function () {\n    pm.response.to.have.status(200);\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_usuario\": \"{{usuario}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/auth/login",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Valida usuario/contrasena contra identidad.usuarios y devuelve un JWT. Usa las variables {{usuario}} y {{password}}; para probar otro rol, cambia esos valores en la pestana Variables y vuelve a enviar."
+          },
+          "response": []
+        },
+        {
+          "name": "3. Listar usuarios (admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base-url}}/usuarios",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            },
+            "description": "Requiere token de un usuario con rol ADMINISTRADOR. Sin token -> 401. Con token de no-admin -> 403."
+          },
+          "response": []
+        },
+        {
+          "name": "4. Crear usuario (admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_empleado\": 5,\n  \"nombre_usuario\": \"nuevo_user\",\n  \"password\": \"clave_segura_123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/usuarios",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            },
+            "description": "Crea un usuario (la contrasena se hashea en el backend). id_empleado debe existir en identidad.empleados y no tener ya usuario (UNIQUE)."
+          },
+          "response": []
+        },
+        {
+          "name": "5. Asignar rol a usuario (admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_rol\": 4\n}",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/usuarios/9/roles",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "usuarios",
+                "9",
+                "roles"
+              ]
+            },
+            "description": "Asigna un rol al usuario indicado en la ruta (cambia el 9 por el id_usuario real). id_rol: 1=ADMINISTRADOR, 2=COMPRADOR, 3=BODEGUERO, 4=VENDEDOR, 5=CAJERO, 6=AUDITOR."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Catalogo y Terceros",
+      "item": [
+        {
+          "name": "logueado_prod",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/productos",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "productos"
+              ]
+            },
+            "description": "Logueo para la parte de productos."
+          },
+          "response": []
+        },
+        {
+          "name": "ADMIN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"sku\":\"X-01\",\"nombre\":\"Prod\",\"id_categoria\":1,\"unidad_medida\":\"UND\",\"precio_lista\":1000 }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/productos",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "productos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logueado_categ",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/categorias",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "categorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logueado_sedes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/sedes",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logueado_alm",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/almacenes",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "almacenes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logueado_prov",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/proveedores",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "proveedores"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "COMPRADOR",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"identificacion\":\"900999-1\",\"razon_social\":\"Prov X\",\"ciudad\":\"Bogota\",\"correo\":\"a@b.com\",\"telefono\":\"3000\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/proveedores",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "proveedores"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logueado_cli",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/clientes",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "clientes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VENDEDOR",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"tipo_documento\":\"CC\",\"num_documento\":\"12345\",\"nombre_completo\":\"Juan\",\"correo\":\"j@b.com\",\"telefono\":\"3001\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-catalogo}}/catalogo/clientes",
+              "host": [
+                "{{url-catalogo}}"
+              ],
+              "path": [
+                "catalogo",
+                "clientes"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Compras",
+      "item": [
+        {
+          "name": "logueado_ord",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-compras}}/compras/ordenes",
+              "host": [
+                "{{url-compras}}"
+              ],
+              "path": [
+                "compras",
+                "ordenes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "COMPRADOR",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{   \"id_proveedor\":1,\r\n    \"id_almacen_destino\":4,\r\n    \"id_empleado\":2,\r\n    \"fecha_estimada\":\"2026-11-10\",\r\n    \"items\":[{\r\n        \"id_producto\":1,\r\n        \"cantidad_solicitada\":10,\r\n        \"costo_unitario\":130000\r\n        }]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-compras}}/compras/ordenes",
+              "host": [
+                "{{url-compras}}"
+              ],
+              "path": [
+                "compras",
+                "ordenes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BODEGUERO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{   \"id_orden_compra\":1,\r\n    \"estado\":\"COMPLETA\",\r\n    \"items\":[{\r\n        \"id_producto\":1,\r\n        \"cantidad_recibida\":10\r\n    }] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-compras}}/compras/recepciones",
+              "host": [
+                "{{url-compras}}"
+              ],
+              "path": [
+                "compras",
+                "recepciones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Inventarios",
+      "item": [
+        {
+          "name": "logueado_invent",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-inventarios}}/inventarios",
+              "host": [
+                "{{url-inventarios}}"
+              ],
+              "path": [
+                "inventarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logueado_min",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-inventarios}}/inventarios/bajo-minimo",
+              "host": [
+                "{{url-inventarios}}"
+              ],
+              "path": [
+                "inventarios",
+                "bajo-minimo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BODEGUERO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{   \r\n    \"id_almacen\":1,\r\n    \"id_producto\":1,\r\n    \"tipo_movimiento\":\"ENTRADA\",\r\n    \"cantidad\":20 \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-inventarios}}/inventarios/movimientos",
+              "host": [
+                "{{url-inventarios}}"
+              ],
+              "path": [
+                "inventarios",
+                "movimientos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transferencias",
+      "item": [
+        {
+          "name": "logueo_trans",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-transferencias}}/transferencias",
+              "host": [
+                "{{url-transferencias}}"
+              ],
+              "path": [
+                "transferencias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BODEGUERO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"id_almacen_origen\":4,\r\n    \"id_almacen_destino\":1,\r\n    \"items\":[{\r\n        \"id_producto\":1,\r\n        \"cantidad_enviada\":10\r\n    }] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-transferencias}}/transferencias",
+              "host": [
+                "{{url-transferencias}}"
+              ],
+              "path": [
+                "transferencias"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ventas, Pagos y Devoluciones",
+      "item": [
+        {
+          "name": "logueo_ventas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-vetnas}}/ventas/pedidos",
+              "host": [
+                "{{url-vetnas}}"
+              ],
+              "path": [
+                "ventas",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VENDENDOR",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"id_sede\":1,\r\n    \"id_almacen\":1,\r\n    \"id_cliente\":1,\r\n    \"id_empleado\":4,\r\n    \"items\":[{\r\n        \"id_producto\":1,\r\n        \"cantidad\":2,\r\n        \"precio_unitario\":189900\r\n    }] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-vetnas}}/ventas/pedidos",
+              "host": [
+                "{{url-vetnas}}"
+              ],
+              "path": [
+                "ventas",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VENDEDOR_confir",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url-vetnas}}/ventas/confirmar/10",
+              "host": [
+                "{{url-vetnas}}"
+              ],
+              "path": [
+                "ventas",
+                "confirmar",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CAJERO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_venta\":1,\r\n    \"valor\":379800,\r\n    \"medio_pago\":\"TARJETA\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-vetnas}}/ventas/pagos",
+              "host": [
+                "{{url-vetnas}}"
+              ],
+              "path": [
+                "ventas",
+                "pagos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CAJERO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_venta\":1,\r\n    \"motivo\":\"Defecto\",\r\n    \"items\":[{\r\n        \"id_producto\":1,\r\n        \"cantidad\":1,\r\n        \"condicion_producto\":\"DAÑADO\"\r\n    }] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url-vetnas}}/ventas/devoluciones",
+              "host": [
+                "{{url-vetnas}}"
+              ],
+              "path": [
+                "ventas",
+                "devoluciones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
