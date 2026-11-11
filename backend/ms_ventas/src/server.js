@@ -1,0 +1,12 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import ventasRoutes from "./ventas.routes.js";
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.get("/", (_req, res) => res.json({ servicio: "ms-ventas", ok: true }));
+app.use("/ventas", ventasRoutes);
+const PORT = process.env.PORT || 4006;
+app.listen(PORT, () => console.log(`ms-ventas en http://localhost:${PORT}`));

@@ -1,0 +1,12 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import catalogoRoutes from "./catalogo.routes.js";
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.get("/", (_req, res) => res.json({ servicio: "ms-catalogo", ok: true }));
+app.use("/catalogo", catalogoRoutes);
+const PORT = process.env.PORT || 4002;
+app.listen(PORT, () => console.log(`ms-catalogo en http://localhost:${PORT}`));

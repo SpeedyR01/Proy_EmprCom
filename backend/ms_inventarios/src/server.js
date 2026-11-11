@@ -1,0 +1,12 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import inventariosRoutes from "./inventarios.routes.js";
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.get("/", (_req, res) => res.json({ servicio: "ms-inventarios", ok: true }));
+app.use("/inventarios", inventariosRoutes);
+const PORT = process.env.PORT || 4004;
+app.listen(PORT, () => console.log(`ms-inventarios en http://localhost:${PORT}`));

@@ -1,0 +1,12 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import comprasRoutes from "./compras.routes.js";
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.get("/", (_req, res) => res.json({ servicio: "ms-compras", ok: true }));
+app.use("/compras", comprasRoutes);
+const PORT = process.env.PORT || 4003;
+app.listen(PORT, () => console.log(`ms-compras en http://localhost:${PORT}`));
