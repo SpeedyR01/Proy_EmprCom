@@ -10,6 +10,30 @@ La carpeta de documentación del backend incluye archivos diseñados para explic
 * **`Endpoints_API.md`:** Detalla las rutas (URLs) y los métodos HTTP (GET, POST, PUT, DELETE) que el backend expone para cada uno de los microservicios de la plataforma.
 * **`Modelos_Payload.md`:** Muestra la estructura exacta (en formato JSON) que el backend espera recibir y enviar al interactuar con la base de datos, sirviendo como contrato para el frontend.
 
+## Estructura de las Carpetas
+Todos los microservicios viven dentro de **`backend/`**, con la MISMA estructura que **`ms-identidad`**:
+```text
+Proy_EmprCom/
+└── backend/
+    ├── ms-identidad/        (puerto 4001)  
+    ├── ms-catalogo/         (puerto 4002)
+    ├── ms-compras/          (puerto 4003)
+    ├── ms-inventarios/      (puerto 4004)
+    ├── ms-transferencias/   (puerto 4005)
+    └── ms-ventas/           (puerto 4006)
+```
+Cada carpeta **`ms-xxx/`** contiene:
+```text
+ms-xxx/
+├── .env
+├── .gitignore
+├── package.json
+└── src/
+    ├── server.js
+    ├── db.js
+    └── <recurso>.routes.js
+```
+
 ## Pruebas de Postman por Microservicio
 
 A continuación, se describen todas las peticiones preconfiguradas en Postman, organizadas por cada microservicio para cubrir la totalidad de las tablas y entidades del modelo.
