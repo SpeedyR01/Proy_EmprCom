@@ -1,3 +1,9 @@
+CREATE ROLE rol_administrador NOLOGIN;
+CREATE ROLE rol_comprador     NOLOGIN;
+CREATE ROLE rol_bodeguero     NOLOGIN;
+CREATE ROLE rol_vendedor      NOLOGIN;
+CREATE ROLE rol_auditor       NOLOGIN;
+
 GRANT USAGE ON SCHEMA inventarios TO
 	rol_administrador, rol_bodeguero, rol_vendedor, rol_comprador, rol_auditor;
 

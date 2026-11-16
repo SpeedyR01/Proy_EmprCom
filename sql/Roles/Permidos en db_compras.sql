@@ -1,3 +1,10 @@
+CREATE ROLE rol_administrador NOLOGIN;
+CREATE ROLE rol_comprador     NOLOGIN;
+CREATE ROLE rol_bodeguero     NOLOGIN;
+CREATE ROLE rol_vendedor      NOLOGIN;
+CREATE ROLE rol_cajero        NOLOGIN;
+CREATE ROLE rol_auditor       NOLOGIN;
+
 GRANT USAGE ON SCHEMA compras TO rol_administrador, rol_comprador, rol_bodeguero, rol_auditor;
 
 -- Comprador: gestiona ordendes de compra y sus detalles

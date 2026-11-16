@@ -1,3 +1,7 @@
+CREATE ROLE rol_administrador NOLOGIN;
+CREATE ROLE rol_bodeguero     NOLOGIN;
+CREATE ROLE rol_auditor       NOLOGIN;
+
 GRANT USAGE ON SCHEMA transferencias TO rol_administrador, rol_bodeguero, rol_auditor;
 
 -- Bodeguero: gestiona transferencias entre almacenes

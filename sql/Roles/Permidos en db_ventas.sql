@@ -1,3 +1,9 @@
+CREATE ROLE rol_administrador NOLOGIN;
+CREATE ROLE rol_bodeguero     NOLOGIN;
+CREATE ROLE rol_vendedor      NOLOGIN;
+CREATE ROLE rol_cajero        NOLOGIN;
+CREATE ROLE rol_auditor       NOLOGIN;
+
 GRANT USAGE ON SCHEMA ventas TO
 	rol_administrador, rol_vendedor, rol_cajero, rol_auditor, rol_bodeguero;
 
