@@ -188,4 +188,61 @@ router.post("/devoluciones/:id/aprobar", requireRole("CAJERO", "ADMINISTRADOR"),
     }
 });
 
+// Crear solicitud de devolucion (cajero o vendedor)
+router.post("/devoluciones", requireRole("CAJERO", "VENDEDOR", "ADMINISTRADOR"), async (req, res) => {
+    const { id_venta, motivo, items } = req.body || {};
+    if (!id_venta || !motivo || !Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: "Faltan campos: id_venta, motivo, items[]" });
+    }
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+
+        // 1. Validar que la venta exista y este confirmada
+        const venta = await client.query(
+            `SELECT id_venta FROM ventas.ventas WHERE id_venta = $1 AND estado = 'CONFIRMADA'`,
+            [id_venta]
+        );
+        if (venta.rowCount === 0) throw new Error("La venta no existe o no esta confirmada");
+
+        // 2. Crear la devolucion (cabecera) en estado SOLICITADA
+        const d = await client.query(
+            `INSERT INTO ventas.devoluciones (id_venta, motivo, estado)
+       VALUES ($1, $2, 'SOLICITADA') RETURNING id_devolucion`,
+            [id_venta, motivo]
+        );
+        const idDev = d.rows[0].id_devolucion;
+
+        // 3. Insertar el detalle, validando que lo devuelto no exceda lo vendido
+        for (const it of items) {
+            const vendido = await client.query(
+                `SELECT dp.cantidad
+           FROM ventas.detalle_pedido dp
+           JOIN ventas.ventas v ON v.id_pedido = dp.id_pedido
+          WHERE v.id_venta = $1 AND dp.id_producto = $2`,
+                [id_venta, it.id_producto]
+            );
+            if (vendido.rowCount === 0)
+                throw new Error(`El producto ${it.id_producto} no pertenece a esta venta`);
+            if (Number(it.cantidad) > Number(vendido.rows[0].cantidad))
+                throw new Error(`La cantidad a devolver del producto ${it.id_producto} excede lo vendido`);
+
+            await client.query(
+                `INSERT INTO ventas.detalle_devolucion (id_devolucion, id_producto, cantidad, condicion_producto)
+         VALUES ($1, $2, $3, $4)`,
+                [idDev, it.id_producto, it.cantidad, it.condicion_producto]
+            );
+        }
+
+        await client.query("COMMIT");
+        res.status(201).json({ id_devolucion: idDev, estado: "SOLICITADA" });
+    } catch (e) {
+        await client.query("ROLLBACK");
+        res.status(400).json({ error: e.message });
+    } finally {
+        client.release();
+    }
+});
+
+
 export default router;
