@@ -1,30 +1,73 @@
-/* ─── PANEL AUDITOR ─── */
-import React from 'react';
-import { roles } from '../../theme';
+/* ─── PANEL AUDITOR (solo lectura: reportes) ─── */
+import React, { useEffect, useState } from 'react';
+import { apiInventarios, apiVentas, apiCompras } from '../../api';
+import { colors, roles, fonts } from '../../theme';
 import PanelLayout from '../../components/PanelLayout';
-import { ShortcutCard } from '../../components/ui';
+import { Card, Table, Button, Skeleton } from '../../components/ui';
 
 const ACCENT = roles.AUDITOR.accent;
 
 export default function Auditor() {
+  const [vista, setVista] = useState('inventario'); // inventario | pedidos | compras
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const cargar = (v) => {
+    setLoading(true);
+    const req = {
+      inventario: () => apiInventarios.get('/inventarios').then((r) => r.data),
+      pedidos: () => apiVentas.get('/ventas/pedidos').then((r) => r.data),
+      compras: () => apiCompras.get('/compras/ordenes').then((r) => r.data),
+    }[v];
+    req().then(setData).catch(() => setData([])).finally(() => setLoading(false));
+  };
+
+  useEffect(() => cargar(vista), [vista]);
+
+  const columnas = {
+    inventario: [
+      { key: 'id_almacen', label: 'Almacén', bold: true },
+      { key: 'id_producto', label: 'Producto' },
+      { key: 'existencia_actual', label: 'Existencia' },
+      { key: 'stock_minimo', label: 'Mínimo' },
+    ],
+    pedidos: [
+      { key: 'id_pedido', label: '# Pedido', bold: true },
+      { key: 'id_sede', label: 'Sede' },
+      { key: 'id_cliente', label: 'Cliente' },
+      { key: 'estado', label: 'Estado' },
+      {
+        key: 'total_registrado', label: 'Total',
+        render: (r) => `$${Number(r.total_registrado).toLocaleString('es-CO')}`
+      },
+    ],
+    compras: [
+      { key: 'id_orden_compra', label: '# Orden', bold: true },
+      { key: 'id_proveedor', label: 'Proveedor' },
+      { key: 'fecha_orden', label: 'Fecha' },
+      { key: 'estado', label: 'Estado' },
+    ],
+  };
+
   return (
     <PanelLayout rol="AUDITOR">
-      <div style={styles.shortcuts}>
-        <ShortcutCard emoji="📈" title="Reportes de ventas" available={false} accent={ACCENT} />
-        <ShortcutCard emoji="🧾" title="Movimientos" available={false} accent={ACCENT} />
+      {/* Nota: el auditor solo consulta, no modifica */}
+      <Card style={{ marginBottom: 24, background: `${ACCENT}0c` }}>
+        <p style={{ color: colors.textSecondary, fontFamily: fonts.body, margin: 0 }}>
+          🔍 Vista de solo lectura. El auditor consulta la información sin modificarla.
+        </p>
+      </Card>
+
+      {/* Tabs de reportes */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
+        <Button variant={vista === 'inventario' ? 'primary' : 'outline'} accent={ACCENT} onClick={() => setVista('inventario')}>📊 Inventario</Button>
+        <Button variant={vista === 'pedidos' ? 'primary' : 'outline'} accent={ACCENT} onClick={() => setVista('pedidos')}>🛍 Ventas / Pedidos</Button>
+        <Button variant={vista === 'compras' ? 'primary' : 'outline'} accent={ACCENT} onClick={() => setVista('compras')}>📝 Compras</Button>
       </div>
-      <p style={{ fontFamily: "'Nunito', sans-serif", fontSize: '14px', color: '#7C7490', marginTop: '12px' }}>
-        Solo lectura — las acciones de escritura no están habilitadas para este rol.
-      </p>
+
+      {loading ? <Skeleton height="220px" />
+        : data.length ? <Table columns={columnas[vista]} data={data} accent={ACCENT} />
+          : <Card><p style={{ color: colors.textSecondary }}>Sin datos para esta vista.</p></Card>}
     </PanelLayout>
   );
 }
-
-const styles = {
-  shortcuts: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-    gap: '16px',
-    marginBottom: '28px',
-  },
-};

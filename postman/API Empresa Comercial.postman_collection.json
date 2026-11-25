@@ -794,6 +794,33 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "CREAR DEVOLUCION",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "",
+                "value": ""
+              }
+            ],
+            "url": {
+              "raw": "{{url-vetnas}}/ventas/devoluciones",
+              "host": [
+                "{{url-vetnas}}"
+              ],
+              "path": [
+                "ventas",
+                "devoluciones"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
