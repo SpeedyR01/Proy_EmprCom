@@ -19,7 +19,7 @@ router.get("/bajo-minimo", async (_req, res) => {
 });
 
 // Registrar movimiento (bodeguero) - actualiza existencia
-router.post("/movimientos", requireRole("BODEGUERO", "ADMINISTRADOR"), async (req, res) => {
+router.post("/movimientos", requireRole("BODEGUERO", "ADMINISTRADOR", "VENDEDOR"), async (req, res) => {
     const { id_almacen, id_producto, tipo_movimiento, cantidad } = req.body || {};
     if (!id_almacen || !id_producto || !tipo_movimiento || cantidad == null) {
         return res.status(400).json({ error: "Faltan campos" });
