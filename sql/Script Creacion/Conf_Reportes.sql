@@ -32,7 +32,7 @@ CREATE USER MAPPING IF NOT EXISTS FOR CURRENT_USER
   OPTIONS (user 'neondb_owner', password 'npg_WAcD3sOE9mez');
 
 IMPORT FOREIGN SCHEMA identidad
-  LIMIT TO (empleados, cargos)
+  LIMIT TO (empleados, cargos, usuarios, auditoria_accesos)
   FROM SERVER srv_identidad INTO reportes;
 
 -- ============================================================

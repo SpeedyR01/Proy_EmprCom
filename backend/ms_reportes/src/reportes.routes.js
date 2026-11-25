@@ -32,27 +32,16 @@ router.get("/", (_req, res) => {
 router.get("/auditoria/accesos", async (_req, res) => {
     try {
         const q = await pool.query(
-            `SELECT aa.id_acceso, u.nombre_usuario, aa.accion,
+            `SELECT aa.id_auditoria, u.nombre_usuario, aa.accion,
                     aa.objeto_consultado, aa.fecha_hora
-             FROM identidad.auditoria_accesos aa
-             JOIN identidad.usuarios u ON u.id_usuario = aa.id_usuario
+             FROM reportes.auditoria_accesos aa
+             JOIN reportes.usuarios u ON u.id_usuario = aa.id_usuario
              ORDER BY aa.fecha_hora DESC
              LIMIT 200`
         );
         res.json(q.rows);
     } catch (e) {
-        // Si no hay FDW a identidad, intentar con tabla local
-        try {
-            const q2 = await pool.query(
-                `SELECT id_acceso, id_usuario AS nombre_usuario, accion,
-                        objeto_consultado, fecha_hora
-                 FROM reportes.auditoria_accesos
-                 ORDER BY fecha_hora DESC LIMIT 200`
-            );
-            res.json(q2.rows);
-        } catch (e2) {
-            res.status(500).json({ error: e2.message });
-        }
+        res.status(500).json({ error: e.message });
     }
 });
 
