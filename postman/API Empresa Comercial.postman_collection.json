@@ -703,14 +703,14 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{url-vetnas}}/ventas/confirmar/9",
+              "raw": "{{url-vetnas}}/ventas/confirmar/11",
               "host": [
                 "{{url-vetnas}}"
               ],
               "path": [
                 "ventas",
                 "confirmar",
-                "9"
+                "11"
               ]
             }
           },
@@ -826,7 +826,306 @@
     },
     {
       "name": "Reportes",
-      "item": []
+      "item": [
+        {
+          "name": "Lista los reportes disponibles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Inventario consolidado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/inventario-consolidado",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "inventario-consolidado"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Productos bajo mínimo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/productos-bajo-minimo",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "productos-bajo-minimo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ventas por sede y periodo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/ventas-sede-periodo",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "ventas-sede-periodo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Compras por proveedor",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/compras-por-proveedor",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "compras-por-proveedor"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Clientes frecuentes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/clientes-frecuentes",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "clientes-frecuentes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ventas por empleado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/ventas-por-empleado",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "ventas-por-empleado"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Historial de movimientos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/movimientos-inventario",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "movimientos-inventario"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Más vendidos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/productos-mas-vendidos",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "productos-mas-vendidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Facturación por medio de pago",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Proxy-Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/facturacion-medio-pago",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "facturacion-medio-pago"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Devoluciones por sede",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/devoluciones-por-sede",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "devoluciones-por-sede"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Saldos pendientes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/saldos-por-venta",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "saldos-por-venta"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resumen consolidado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url-reportes}}/reportes/resumen-por-sede",
+              "host": [
+                "{{url-reportes}}"
+              ],
+              "path": [
+                "reportes",
+                "resumen-por-sede"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "auth": {

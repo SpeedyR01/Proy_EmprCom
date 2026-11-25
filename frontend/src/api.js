@@ -18,3 +18,4 @@ export const apiCompras = crearCliente(import.meta.env.VITE_URL_COMPRAS);
 export const apiInventarios = crearCliente(import.meta.env.VITE_URL_INVENTARIOS);
 export const apiTransferencias = crearCliente(import.meta.env.VITE_URL_TRANSFERENCIAS);
 export const apiVentas = crearCliente(import.meta.env.VITE_URL_VENTAS);
+export const apiReportes = crearCliente(import.meta.env.VITE_URL_REPORTES);
