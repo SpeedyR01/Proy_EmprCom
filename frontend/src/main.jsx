@@ -3,14 +3,15 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./auth";
 import RutaProtegida from "./components/RutaProtegida";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import Admin from "./pages/Admin";
-import Comprador from "./pages/Comprador";
-import Bodeguero from "./pages/Bodeguero";
-import Vendedor from "./pages/Vendedor";
-import Cajero from "./pages/Cajero";
-import Auditor from "./pages/Auditor";
+import Login from "./pages/login/Login";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Admin from "./pages/admin/Admin";
+import Comprador from "./pages/comprador/Comprador";
+import Bodeguero from "./pages/bodeguero/Bodeguero";
+import Vendedor from "./pages/vendedor/Vendedor";
+import Cajero from "./pages/cajero/Cajero";
+import Auditor from "./pages/auditor/Auditor";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
