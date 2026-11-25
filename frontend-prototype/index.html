@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proy_EmprCom · Prototipo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Selector de pantallas (solo prototipo, no es parte del producto) -->
+  <nav class="proto-nav" id="protoNav" aria-label="Navegador del prototipo">
+    <button class="proto-nav__toggle" id="protoNavToggle" aria-expanded="true">☰ Pantallas</button>
+    <div class="proto-nav__list" id="protoNavList"></div>
+  </nav>
+
+  <main id="app" class="app"></main>
+
+  <!-- Contenedor de toasts -->
+  <div class="toast-layer" id="toastLayer" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="components.js"></script>
+  <script src="screens.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
