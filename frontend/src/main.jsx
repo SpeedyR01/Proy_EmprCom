@@ -8,7 +8,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Admin from "./pages/admin/Admin";
 import Comprador from "./pages/comprador/Comprador";
 import Bodeguero from "./pages/bodeguero/Bodeguero";
-import Vendedor from "./pages/vendedor/vendedorr";
+import Vendedor from "./pages/vendedor/vendedor";
 import Cajero from "./pages/cajero/Cajero";
 import Auditor from "./pages/auditor/Auditor";
 import "./index.css";
